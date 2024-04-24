@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content="width=device-width,initial-scale=1" name="viewport">
+  <meta content="description" name="description">
+  <meta name="google" content="notranslate" />
+  <meta content="Mashup templates have been developped by Orson.io team" name="author">
+
+  <!-- Disable tap highlight on IE -->
+  <meta name="msapplication-tap-highlight" content="no">
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-icon-180x180.png">
+  <link href="./static/assets/mate.ico" rel="icon">
+
+  <title>Ask your document app</title>  
+
+  <link href="./static/main.3f6952e4.css" rel="stylesheet">
+</head>
+
+<body class="">
+  <div id="site-border-left"></div>
+  <div id="site-border-right"></div>
+  <div id="site-border-top"></div>
+  <div id="site-border-bottom"></div>
+  <!-- Add your content of header -->
+  <header>
+    <nav class="navbar  navbar-fixed-top navbar-default">
+      <div class="container">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+          <ul class="nav navbar-nav ">
+            <li><a href="./index.html" title="">01 : Home</a></li>
+            <li><a href="./works.html" title="">02 : Works</a></li>
+            <li><a href="./about.html" title="">03 : About me</a></li>
+            <li><a href="./contact.html" title="">04 : Contact</a></li>
+          </ul>
+
+
+          <ul class="nav navbar-nav navbar-right navbar-small visible-md visible-lg">
+            <li><a href="./work1.html" title="">001</a></li>
+            <li><a href="./work2.html" title="">002</a></li>
+            <li><a href="./work3.html" title="">003</a></li>
+            <li><a href="./work4.html" title="">004</a></li>
+            <li><a href="./work5.html" title="">005</a></li>
+            <li><a href="./index.html" title=""class="active">006</a></li>
+          </ul>
+
+
+        </div> 
+      </div>
+    </nav>
+  </header>
+  <div class="section-container">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12">
+          <img src="./static/assets/images/work2_01.jpg" class="img-responsive" alt="">
+          <div class="card-container">
+            <div class="text-center">
+              <h1 class="h2">002 : Ask your document app</h1>
+            </div>
+            <p>Lightweight NLP app using Langchain and OpenAI API, deployed through Streamlit framework. To use it, you need to have access to the OpenAI API key.
+              Check the app here: <a href="https://annelisseishere.streamlit.app" target="_blank">https://annelisseishere.streamlit.app</a> </p> 
+
+            <!-- <blockquote>
+              <p>"Let me introduce you my little project aimed at using the options offered by ChatGPT."</p>
+              <small class="pull-right">Irina Martin</small>
+            </blockquote> -->
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-md-12">
+          <h3>Introduction</h3>
+          <p>Let me introduce you my little project aimed at using options offered by ChatGPT. You can see the front-page of the app down below.
+            This code implements a web application that allows users to upload documents (in PDF, DOCX, or XLSX format) and ask questions based on 
+            the content of the document. The application extracts text from the uploaded document and creates a knowledge base to perform question 
+            answering using language models.
+          </p>
+          <div class="col-xs-12">
+            <img src="./static/assets/images/streamlit.jpg" class="img-responsive" alt="" width="800">
+            <p class="text-center">App title-page</p>
+          </div>
+          <h3>Documentation</h3>
+          <h3>1. Prerequisites</h3>
+          <ol type="A" style="padding-left: 60px">
+            <li>Python 3.x</li>
+            <li>Github</li>
+            <li>Streamlit account</li>
+            <li>Code editor(Visual Studio Code, Sublime Text, etc.)</li>
+            <li>The following Python libraries:
+              <ul style="list-style-type: disc; padding-left: 20px;">
+                <li>dotenv</li>
+                <li>os</li>
+                <li>streamlit</li>
+                <li>langchain</li>
+                <li>docx</li>
+                <li>openpyxl</li>
+                <li>pdfplumber</li>
+              </ul>
+            </li>
+          </ol>
+          <h3>2. Explanation</h3>
+          <p>In the picture down below, you can see the architecture of this process. First of all, you need to extract text from your document (PDF, DOCX, XLSX).</p>
+          <div class="col-xs-12">
+            <img src="./static/assets/images/ChatGPT_SEPS_CAPCARA.jpg" class="img-responsive" alt="" width="800">
+            <p class="text-center">App architecture</p>
+          </div>
+          <p>Lets start with PDF:</p>
+          <pre><code style="font-size: 13px;">def extract_text_from_pdf(pdf_file):
+  with pdfplumber.open(pdf_file) as pdf:
+    text = ""
+    for page in pdf.pages:
+      text += page.extract_text()
+  return text</code></pre>
+          <p>As you can see, I used pdfplumber library for extracting text. The most famous is maybe PyPDF2, but with my testing files, I reached better results using pdfplumber.
+            For extract text from other types of document, it is necessary to create similar function like this. 
+          </p>
+        
+          <p>For this purpose, I will continue straight to the next step.</p>
+          <p>Now, I need to divide the uploaded document into smaller text "pieces". This is done to provide contextual information to OpenAI when I ask it a question. 
+            OpenAI embeddings work best with shorter pieces of text. Instead of making OpenAI read the entire document every time I ask a question, 
+            it is more efficient and cost-effective to give it a smaller section of relevant information to process. </p>
+            
+            <pre><code style="font-size: 13px;">def split_text_into_chunks(text):
+  text_splitter = CharacterTextSplitter(
+    separator="\n",
+    chunk_size=1000,
+    chunk_overlap=200,
+    length_function=len
+  )
+  return text_splitter.split(text)</code></pre>
+
+            <p>I set the size of one chunk to 1000 characters (you can experiment with this numbers and maybe you will find it better)
+              and the overlap to 200 characters. Overlap variable is used to preserve context: By including an overlap between consecutive chunks, 
+              you ensure that important context from the previous chunk is retained in the subsequent chunk.
+              This is especially relevant for tasks that require a sequential understanding of the text,so exactly for this occasion.
+              Without overlap, the information at the end of each chunk could be lost, potentially leading to incomplete or incorrect results. 
+            </p>
+
+            <p>My further action is to create embeddings which function is to represents document text into vectors(very simplified explanation). 
+              After embeddings there is nothing to prevents me from create knowledge base using FAISS class. 
+              FAISS is a vector store class that provides efficient storage and retrieval of vector representations.
+            </p>
+
+            <pre><code style="font-size: 13px;">def create_knowledge_base(chunks, api_key=None):
+    embeddings = OpenAIEmbeddings(openai_api_key=api_key)
+    knowledge_base = FAISS.from_texts(chunks, embeddings)
+    return knowledge_base</code></pre>
+
+            <p>After knowledge base exists, there comes user question to the scene. There is answer_question function for this purpose. It takes
+              a user's question, a knowledge base, and a language model. It performs a similarity search to find relevant document chunks, 
+              initializes the language model, loads the question-answering chain, and runs the chain to obtain the response to the user's question
+              based on the document content.</p>
+
+            <pre><code style="font-size: 13px;">def answer_question(question, knowledge_base, model):
+    docs = knowledge_base.similarity_search(question)
+    llm = model(model_name="gpt-3.5-turbo", openai_api_key=st.session_state.api_key)
+    chain = load_qa_chain(llm, chain_type="stuff")
+    with get_openai_callback() as cb:
+      response = chain.run(input_documents=docs, question=question)
+    return response</code></pre>
+    
+          <h3>3. Usage</h3>
+          <h3>4. Functionality</h3>
+          <h3>5. Limitations</h3>
+          <ul>
+            <li>The accuracy of the answers depends on the quality and relevance of the document content and the performance of the selected language model.</li>
+            <li>Large documents may take longer to process, and the application's performance may be affected.</li>
+            <li>The choice of chunk size and overlap can impact the accuracy of the answers. Adjust these parameters based on the characteristics of the documents and the desired trade-off between performance and accuracy.</li>
+            <li>The application requires a valid API key from OpenAI to access the language model. Ensure that you have the necessary permissions and adhere to the terms of service.</li>
+            <li>Only PDF, docx, and xlsx file formats are supported for document upload. Other file formats will not be accepted.</li>
+            <li>The application does not support real-time collaborative editing or simultaneous user interactions. It is designed for single-user interactions.</li>
+            <li>While the application aims to provide helpful answers, it may not cover all possible questions or provide the desired level of accuracy for complex queries.</li>
+          </ul>
+          <h3>6. Conclusion</h3>
+          
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer-container text-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12">
+          <p>© ANNELISSEISHERE | Website created using own Flask server <a href="https://flask.palletsprojects.com/en/3.0.x/" title="Flask is a micro web framework written in Python">Flask</a>/<a href="https://www.python.org/" title="Best programming language">Python</a></p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+      navActivePage();
+    });
+  </script>
+
+  <!-- Google Analytics: change UA-XXXXX-X to be your site's ID 
+
+  <script>
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date(); a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+    ga('create', 'UA-XXXXX-X', 'auto');
+    ga('send', 'pageview');
+  </script>
+
+  --> <script type="text/javascript" src="./static/main.70a66962.js"></script>
+</body>
+
+</html>
+
